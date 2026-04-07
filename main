@@ -1,0 +1,2178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yoonji Lee — HCI × Design Researcher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;1,300&family=IBM+Plex+Sans:ital,wght@0,300;0,400;1,300&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --color-background-primary: #ffffff;
+      --color-background-secondary: #f5f5f5;
+      --color-text-primary: #111111;
+      --color-text-secondary: #4a4a4a;
+      --color-text-tertiary: #999999;
+      --color-text-justdo: #2634ac;
+      --color-border-primary: #111111;
+      --color-border-secondary: #cccccc;
+      --color-border-tertiary: #e5e5e5;
+    }
+
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      background: var(--color-background-primary);
+      color: var(--color-text-primary);
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 16px;
+      height: 42px;
+      border-bottom: 1px solid var(--color-text-primary);
+      position: sticky;
+      top: 0;
+      background: var(--color-background-primary);
+      z-index: 20;
+    }
+
+    .topbar-right {
+      text-align: right;
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+    }
+
+    .topbar-name {
+      font-size: 16px;
+      cursor: pointer;
+      color: var(--color-text-primary);
+    }
+
+    .topbar-name .n-def {
+      display: inline;
+    }
+
+    .topbar-name .n-hov {
+      display: none;
+    }
+
+    .topbar-name:hover .n-def {
+      display: none;
+    }
+
+    .topbar-name:hover .n-hov {
+      display: inline;
+    }
+
+    .topbar-nav {
+      display: flex;
+      list-style: none;
+      height: 38px;
+    }
+
+    .topbar-nav li a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 150px;
+      height: 38px;
+      font-size: 16px;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      border-bottom: 1px solid transparent;
+      transition: color 0.1s, border-color 0.1s;
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .topbar-nav li a:hover,
+    .topbar-nav li a.active {
+      color: var(--color-text-primary);
+    }
+
+    .topbar-nav li a .lbl,
+    .topbar-nav li a .emo {
+      position: absolute;
+      transition: opacity 0.12s;
+    }
+
+    .topbar-nav li a .lbl {
+      opacity: 1;
+    }
+
+    .topbar-nav li a .emo {
+      opacity: 0;
+      font-size: 16px;
+    }
+
+    .topbar-nav li a:hover .lbl,
+    .topbar-nav li a.active .lbl {
+      opacity: 0;
+    }
+
+    .topbar-nav li a:hover .emo,
+    .topbar-nav li a.active .emo {
+      opacity: 1;
+    }
+
+    .bottombar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 9px 16px;
+      border-top: 1px solid var(--color-text-primary);
+      font-size: 14px;
+      background: var(--color-background-primary);
+    }
+
+    .bottombar-mid {
+      text-align: center;
+      color: var(--color-text-secondary);
+    }
+
+    .bottombar-right {
+      text-align: right;
+      color: var(--color-text-tertiary);
+    }
+
+    .page {
+      display: none;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page.active {
+      display: block;
+      flex: 1;
+    }
+
+
+    .prop-head {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      border-bottom: 1px solid var(--color-border-tertiary);
+    }
+
+    .prop-left {
+      padding: 14px 16px;
+      border-right: 1px solid var(--color-border-tertiary);
+      line-height: 1.5;
+    }
+
+    .prop-label {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .prop-sub {
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      margin-top: 3px;
+    }
+
+    .prop-right {
+      padding: 14px 16px;
+    }
+
+    .prop-desc {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--color-text-primary);
+    }
+
+    .prop-head-single {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--color-border-tertiary);
+    }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      /* border-left: 1px solid var(--color-border-tertiary); */
+    }
+
+    .g-cell {
+      /* border-right: 1px solid var(--color-border-tertiary); */
+      border-bottom: 1px solid var(--color-border-tertiary);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .g-cell:hover .g-over {
+      opacity: 1;
+    }
+
+    .g-img {
+      width: 100%;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      position: relative;
+    }
+
+    .g-wide {
+      grid-column: span 2;
+    }
+
+    .g-wide .g-img {
+      aspect-ratio: 2/1;
+    }
+
+    .g-cap {
+      padding: 7px 12px 9px;
+      border-top: 1px solid var(--color-border-tertiary);
+      border-left: 1px solid var(--color-border-tertiary);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px;
+      align-items: baseline;
+      position: relative;
+      z-index: 0;
+    }
+
+    .g-cap-id {
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      white-space: nowrap;
+    }
+
+    .g-cap-title {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      text-align: right;
+    }
+
+    .g-over {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.18s;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px 20px 50px;
+      z-index: 1;
+    }
+
+    .g-over-tag {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      letter-spacing: 0.04em;
+      margin-bottom: 3px;
+    }
+
+    .g-over-title {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--color-text-primary);
+    }
+
+    .g-over-arrow {
+      font-size: 12px;
+      color: var(--color-text-primary);
+      margin-top: 10px;
+    }
+
+    .g-cell:hover .img-default {
+      display: none;
+    }
+
+    .g-cell:hover .img-hover {
+      display: block;
+    }
+
+    .about-intro {
+      display: grid;
+      grid-template-columns: 160px 1fr 120px 40px;
+      border-bottom: 1px solid var(--color-border-tertiary);
+      min-height: 160px;
+    }
+
+    .about-intro-name {
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .about-intro-name .name-main {
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      line-height: 1.4;
+    }
+
+    .about-intro-name .name-role {
+      font-size: 14px;
+      color: var(--color-text-primary);
+      line-height: 1.4;
+    }
+
+    .about-intro-name .name-loc {
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      line-height: 1.4;
+    }
+
+    .about-intro-bio {
+      padding: 1.5rem 1.5rem;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--color-text-primary);
+    }
+
+    .about-intro-photo {
+      background: var(--color-background-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      flex-direction: column;
+      gap: 4px;
+      border-left: 1px solid var(--color-border-tertiary);
+    }
+
+    .about-statement {
+      display: grid;
+      grid-template-columns: 160px 1fr 160px;
+      border-bottom: 1px solid var(--color-border-primary);
+    }
+
+    .about-stmt-label {
+      padding: 1.5rem 1rem;
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+    }
+
+    .about-stmt-text {
+      padding: 1.5rem 9rem 1.5rem 1.5rem;
+      font-family: 'JetBrains Mono', sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--color-text-secondary);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .about-stmt-photo {
+      background: var(--color-background-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      flex-direction: column;
+      gap: 4px;
+      border-left: 1px solid var(--color-border-tertiary);
+    }
+
+    .about-interests {
+      border-bottom: 1px solid var(--color-border-tertiary);
+      padding: 0 16px 2rem;
+    }
+
+    .ri-label {
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      padding: 30px 0 30px;
+    }
+
+    .ri-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px;
+      padding: 5px 14px;
+      border: 0.5px solid var(--color-border-primary);
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    .ri-line {
+      flex: 1;
+      height: 0.5px;
+      background: var(--color-border-primary);
+    }
+
+    .ri-proj {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .ri-proj:hover .ri-thumb {
+      border-color: var(--color-border-primary);
+    }
+
+    .ri-thumb {
+      width: 200px;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      position: relative;
+      overflow: hidden;
+      cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>👀</text></svg>") 16 16, pointer;
+    }
+
+
+
+    .ri-thumb::after {
+      content: 'click to see more';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.2);
+      color: white;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .ri-proj:hover .ri-thumb::after {
+      opacity: 1;
+    }
+
+    .ri-lbl {
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      text-align: center;
+      max-width: 150px;
+    }
+
+    .about-contact {
+      padding: 1.2rem 16px;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .about-contact-link {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .about-contact-link:hover {
+      color: var(--color-text-primary);
+    }
+
+    .proj-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-left: 1px solid var(--color-border-tertiary);
+    }
+
+    .proj-card {
+      border-right: 1px solid var(--color-border-tertiary);
+      border-bottom: 1px solid var(--color-border-tertiary);
+      cursor: pointer;
+      overflow: hidden;
+      transition: background 0.1s;
+    }
+
+    .proj-card:hover {
+      background: var(--color-background-secondary);
+    }
+
+    .proj-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+      /* border-bottom: 1px solid var(--color-border-primary); */
+    }
+
+    .proj-body {
+      padding: 14px 16px;
+    }
+
+    .proj-id {
+      font-size: 12px;
+      color: var(--color-text-primary);
+      margin-bottom: 8px;
+    }
+
+    .proj-title {
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 3px;
+      line-height: 1.8;
+
+    }
+
+    .proj-desc {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--color-text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .proj-tags {
+      font-family: 'IBM Plex Sans', sans-serif;
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .proj-tag {
+      font-size: 14px;
+      padding: 3px 8px;
+      border: 0.5px solid var(--color-border-tertiary);
+      color: var(--color-text-tertiary);
+    }
+
+    .proj-page-header {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      border-bottom: 1px solid var(--color-border-tertiary);
+    }
+
+
+    .proj-page-left {
+      padding: 2rem 1.5rem 2rem 13rem;
+      border-right: 1px solid var(--color-border-tertiary);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .proj-back {
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      margin-left: -11.5rem;
+    }
+
+    .proj-back:hover {
+      color: var(--color-text-primary);
+    }
+
+    .proj-page-title {
+      margin-top: -20px;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .proj-page-venue {
+      font-size: 20px;
+      color: var(--color-text-tertiary);
+      margin-top: 15px;
+      line-height: 1.7;
+    }
+
+    .proj-meta-block {
+      padding-top: 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .proj-meta-row {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 15px;
+    }
+
+    .proj-meta-key {
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      letter-spacing: 0.06em;
+      padding-top: 1px;
+    }
+
+    .proj-meta-val {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+    }
+
+    .proj-page-link {
+      display: inline-block;
+      font-size: 14px;
+      padding: 6px 14px;
+      border: 0.5px solid var(--color-border-secondary);
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.12s;
+      width: fit-content;
+    }
+
+    .proj-page-link:hover {
+      background: var(--color-background-secondary);
+    }
+
+    .proj-page-right {
+      padding: 2rem;
+    }
+
+    .proj-abstract-label {
+      font-size: 16px;
+      letter-spacing: 0.08em;
+      color: var(--color-text-tertiary);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .proj-abstract {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--color-text-primary);
+      padding-top: 8px;
+      padding-right: 5rem;
+    }
+
+    .proj-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-left: 1px solid var(--color-border-tertiary);
+      border-top: none;
+      padding: 1rem 4rem !important;
+      margin-top: 1rem;
+    }
+
+
+    .proj-gallery-cell {
+      border-right: 1px solid var(--color-border-tertiary);
+      border-bottom: 1px solid var(--color-border-tertiary);
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      background: var(--color-background-secondary);
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .proj-gallery-cell span {
+      font-size: 10px;
+      letter-spacing: 0.04em;
+    }
+
+    .pub-page {
+      padding: 2rem;
+    }
+
+    .pub-filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      justify-content: center;
+      transform: scale(0.8);
+      transform-origin: center center;
+    }
+
+    .filter-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px;
+      padding: 5px 16px;
+      border: 0.5px solid var(--color-border-secondary);
+      border-radius: 0;
+      background: transparent;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .filter-btn:hover {
+      background: var(--color-background-secondary);
+    }
+
+    .filter-btn.active {
+      background: var(--color-text-primary);
+      color: var(--color-background-primary);
+    }
+
+    .year-group {
+      margin-bottom: 2rem;
+    }
+
+    .year-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px;
+      color: var(--color-text-tertiary);
+      margin-bottom: 1rem;
+    }
+
+    .pub-item {
+      padding: 1rem 0;
+      border-top: 0.5px solid var(--color-border-tertiary);
+    }
+
+    .pub-item:last-child {
+      border-bottom: 0.5px solid var(--color-border-tertiary);
+    }
+
+    .pub-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-bottom: 4px;
+      color: var(--color-text-primary);
+    }
+
+    .pub-authors {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--color-text-secondary);
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+
+    .pub-authors .me {
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .pub-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+    }
+
+    .pub-venue {
+      color: var(--color-text-secondary);
+    }
+
+    .pub-badge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      padding: 2px 13px 2px 8px;
+      background-color: #a9a9a9;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pub-links {
+      display: flex;
+      gap: 8px;
+    }
+
+    .pub-link {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+    }
+
+    .pub-link:hover {
+      color: var(--color-text-primary);
+      text-decoration: underline;
+    }
+
+    .cart-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--color-border-tertiary);
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .cart-title-main {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .cart-subtitle {
+      font-size: 16px;
+      color: var(--color-text-tertiary);
+      letter-spacing: 0.04em;
+    }
+
+    .cart-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-left: 1px solid var(--color-border-tertiary);
+      grid-auto-rows: auto;
+      align-items: start;
+    }
+
+    .cart-cell {
+      border-right: 1px solid var(--color-border-tertiary);
+      border-bottom: 1px solid var(--color-border-tertiary);
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .cart-img {
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--color-background-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      border-bottom: 1px solid var(--color-border-tertiary);
+    }
+
+    .cart-wide {
+      grid-column: span 2;
+    }
+
+    .cart-wide .cart-img {
+      aspect-ratio: 2/1;
+    }
+
+    .cart-cap {
+      padding: 10px 12px 12px;
+    }
+
+    .cart-cap-cat {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .cart-cap-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-text-primary);
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    .cart-cap-desc {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90vh;
+      object-fit: contain;
+    }
+
+    .img-default,
+    .img-hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* transition: opacity 0.4s; */
+    }
+
+    .img-hover {
+      opacity: 0;
+    }
+
+
+    @media (min-width: 2200px) {
+      body {
+        font-size: 18px;
+      }
+
+      .prop-label,
+      .prop-sub,
+      .prop-desc {
+        font-size: 19px;
+      }
+
+      .g-cap-id {
+        font-size: 16px;
+      }
+
+      .g-cap-title {
+        font-size: 17px;
+      }
+
+      .g-over-tag {
+        font-size: 17px;
+      }
+
+      .g-over-title {
+        font-size: 21px;
+      }
+
+      .g-over-arrow {
+        font-size: 16px;
+      }
+
+      .about-intro-bio,
+      .about-stmt-text {
+        font-size: 19px;
+      }
+
+      .ri-tag {
+        font-size: 18px;
+      }
+
+      .ri-lbl {
+        font-size: 16px;
+      }
+
+      .proj-id {
+        font-size: 17px;
+      }
+
+      .proj-title {
+        font-size: 20px;
+      }
+
+      .proj-desc {
+        font-size: 19px;
+      }
+
+      .proj-tag {
+        font-size: 16px;
+      }
+
+      .proj-page-title {
+        font-size: 27px;
+      }
+
+      .proj-page-venue {
+        font-size: 23px;
+      }
+
+      .proj-abstract {
+        font-size: 21px;
+      }
+
+      .proj-meta-key {
+        font-size: 18px;
+      }
+
+      .proj-meta-val {
+        font-size: 18px;
+      }
+
+      .pub-title {
+        font-size: 19px;
+      }
+
+      .pub-authors {
+        font-size: 17px;
+      }
+
+      .bottombar {
+        font-size: 16px;
+      }
+
+      .topbar-name,
+      .topbar-right {
+        font-size: 19px;
+      }
+
+      .topbar-nav li a {
+        font-size: 20px;
+        width: 180px;
+      }
+
+      .ri-thumb {
+        width: 260px;
+        height: 320px;
+      }
+
+      .ri-label,
+      .about-stmt-label {
+        font-size: 18px;
+      }
+
+      .about-intro-name .name-main,
+      .about-intro-name .name-role,
+      .about-intro-name .name-loc {
+        font-size: 17px;
+      }
+
+      .proj-page-link {
+        font-size: 18px;
+      }
+
+      .proj-back {
+        font-size: 20px;
+      }
+
+
+      .proj-meta-row {
+        grid-template-columns: 120px 1fr;
+      }
+
+      .proj-page-left {
+        padding: 2rem 1.5rem 2rem 17rem;
+      }
+
+      .proj-back {
+        margin-left: -31.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">
+    <span class="topbar-name" onclick="show('home')"><span class="n-def">Yoonji Lee</span><span
+        class="n-hov">이윤지</span></span>
+    <ul class="topbar-nav">
+      <li><a onclick="show('about')" id="nav-about"><span class="lbl">About</span><span class="emo">👩🏻‍💻</span></a>
+      </li>
+      <li><a onclick="show('projects')" id="nav-projects"><span class="lbl">Projects</span><span
+            class="emo">❤️‍🔥</span></a></li>
+      <li><a onclick="show('publications')" id="nav-publications"><span class="lbl">Publications</span><span
+            class="emo">📚</span></a></li>
+      <li><a onclick="show('cart')" id="nav-cart"><span class="lbl">C(a)rt</span><span class="emo">🧠</span></a></li>
+    </ul>
+    <span class="topbar-right" id="top-date"></span>
+  </div>
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div class="prop-head">
+      <div class="prop-left">
+        <div class="prop-label">Selected Work</div>
+        <div class="prop-sub">2021 – 2026 · HCI + Design Researcher</div>
+      </div>
+      <div class="prop-right">
+        <p class="prop-desc">An-nyeong-ha-se-yo! ("Hello" 👋🏼 in Korean) I am PhD candidate in the Industrial
+          Department
+          KAIST. <br> I design and build interactive systems that utilize various materials — plants, ice, soil,
+          thermochromic elements — to create expressive digital experiences.</p>
+      </div>
+    </div>
+    <div class="home-grid">
+      <div class="g-cell g-wide" onclick="show('proj-wpp')">
+        <div class="g-img" style="background:transparent;">
+          <img class="img-default" src="chi2026-1.png" style="width:100%;height:100%;object-fit:cover;">
+          <img class="img-hover" src="chi2026-2.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="g-cap"><span class="g-cap-id">P1 — CHI 2026</span><span class="g-cap-title">WHEN PLANTS PLAY</span>
+        </div>
+        <div class="g-over"><span class="g-over-tag">CHI 2026 · 🏆 Best Paper Award (Top 1%)</span><span
+            class="g-over-title">When Plants Play: Rethinking Plant Materiality in Digital Games</span><span
+            class="g-over-arrow">→ View project 👀</span></div>
+      </div>
+      <div class="g-cell" onclick="show('proj-icy')">
+        <div class="g-img" style="background:transparent;">
+          <img class="img-default" src="dis2024-1.png" style="width:100%;height:100%;object-fit:cover;">
+          <img class="img-hover" src="dis2024-2.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="g-cap"><span class="g-cap-id">P2 — DIS 2024</span><span class="g-cap-title">ICY INTERFACES</span>
+        </div>
+        <div class="g-over"><span class="g-over-tag">DIS 2024 · Full Paper</span><span class="g-over-title">ICY
+            Interfaces: Exploration of Ice’s Ephemeral Features for Digital Game User Experience</span><span
+            class="g-over-arrow">→ View project 👀</span>
+        </div>
+      </div>
+      <div class="g-cell" onclick="show('proj-pp')">
+        <div class="g-img" style="background:transparent;">
+          <img class="img-default" src="siggraph2025-1.png" style="width:100%;height:100%;object-fit:cover;">
+          <img class="img-hover" src="siggraph2025-2.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="g-cap"><span class="g-cap-id">P3 — SIGGRAPH ART GALLERY 2025</span><span
+            class="g-cap-title">PLANT.PLAY()</span></div>
+        <div class="g-over"><span class="g-over-tag">SIGGRAPH 2025 · Art Gallery</span><span
+            class="g-over-title">Plant.play()</span><span class="g-over-arrow">→ View project 👀</span></div>
+      </div>
+      <div class="g-cell" onclick="show('proj-tp')">
+        <div class="g-img" style="background:transparent;">
+          <img class="img-default" src="tei2024-2.png" style="width:100%;height:100%;object-fit:cover;">
+          <img class="img-hover" src="tei2024-1.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="g-cap"><span class="g-cap-id">P4 — TEI 2024</span><span class="g-cap-title">THERMO-PLAY</span></div>
+        <div class="g-over"><span class="g-over-tag">TEI 2024 · Full Paper</span><span class="g-over-title">Thermo-Play:
+            Exploring the Playful Qualities of Thermochromic Materials</span><span class="g-over-arrow">→ View
+            project 👀</span></div>
+      </div>
+      <div class="g-cell" onclick="show('proj-ss')">
+        <div class="g-img" style="background:transparent;">
+          <img class="img-default" src="uist2025-1.png" style="width:100%;height:100%;object-fit:cover;">
+          <img class="img-hover" src="uist2025-2.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="g-cap"><span class="g-cap-id">P5 — UIST POSTER 2025</span><span class="g-cap-title">SILENT
+            SUSPENSE</span></div>
+        <div class="g-over"><span class="g-over-tag">UIST 2025 · Poster + GwangJu Design Biennale 2025</span><span
+            class="g-over-title">Silent
+            Suspense:
+            Multimodal Haptics for Horror Film Experiences for Deaf and Hard-of-Hearing (DHH) Audiences</span><span
+            class="g-over-arrow">→ View project 👀</span></div>
+      </div>
+      <div class="g-cell" onclick="show('proj-gb')">
+        <div class="g-img" style="background:transparent;">
+          <img class="img-default" src="chilbw2023-1.png" style="width:100%;height:100%;object-fit:cover;">
+          <img class="img-hover" src="chilbw2023-2.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="g-cap"><span class="g-cap-id">P6 — CHI LBW 2023</span><span class="g-cap-title">GLOW THE BUZZ</span>
+        </div>
+        <div class="g-over"><span class="g-over-tag">CHI 2023 · Extended Abstract · 🏆 Student Game Competition
+            Finalist</span><span class="g-over-title">Glow
+            the Buzz: a VR puzzle adventure game mainly played through haptic feedback</span><span
+            class="g-over-arrow">→ View project 👀</span>
+        </div>
+      </div>
+      <div class="g-cell">
+        <div class="g-img" style="background:transparent;">
+          <img class="img-default" src="iac2022-1.png" style="width:100%;height:100%;object-fit:cover;">
+          <img class="img-hover" src="iac2022-2.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="g-cap"><span class="g-cap-id">P7 — SpaceCHI 2023 + IAC 2022</span><span
+            class="g-cap-title">SPACE-GROUNDED</span></div>
+        <div class="g-over"><span class="g-over-tag">SpaceCHI 2023 + IAC 2022</span><span
+            class="g-over-title">Space-Grounded: Developing an antidepressant inhalation device using natural materials
+            to enhance crew well-being</span>
+          </span></div>
+      </div>
+      <div class="g-cell" onclick="show('proj-50k')">
+        <div class="g-img" style="background:transparent;">
+          <img class="img-default" src="50000-1.png" style="width:100%;height:100%;object-fit:cover;">
+          <img class="img-hover" src="50000-2.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="g-cap"><span class="g-cap-id">P8 — RETAIL + EXHIBITION </span><span class="g-cap-title">50,000
+            Timepieces</span>
+        </div>
+        <div class="g-over"><span class="g-over-tag">Seoul Design Festival 2021 · DDP</span><span
+            class="g-over-title">50,000 Timepieces</span><span class="g-over-arrow">→ View project 👀</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="page" id="page-about">
+    <div class="about-intro" style="grid-template-columns:160px 1fr 160px 80px;">
+      <div class="about-intro-name">
+        <span class="name-main">YOONJI LEE</span>
+        <span class="name-role">HCI × DESIGN RESEARCHER</span>
+        <span class="name-loc">Based in Daejeon, <br> South Korea 🇰🇷</span>
+      </div>
+      <div class="about-intro-bio">
+        I am currently a third-year PhD candidate of the Industrial Design department at KAIST. I am advised by Prof.
+        Chang Hee Lee at <a href="https://asc.kaist.ac.kr/" target="_blank"
+          style="color:var(--color-text-secondary);text-decoration:underline;">Affective Systems and Cognition (ASC)
+          Lab</a>.
+        <br>Open to fun and interesting research / art / design collaborations🖤 Reach me out by:
+        <a href="mailto:leeyoonji@kaist.ac.kr"
+          style="color:var(--color-text-primary);text-decoration:underline;font-weight:400;">leeyoonji {at} kaist (dot)
+          ac (dot) kr</a> &nbsp;·&nbsp;
+        <a href="https://www.linkedin.com/in/yoonji-lee-66b513214" target="_blank"
+          style="color:var(--color-text-primary);text-decoration:underline;font-weight:400;">LinkedIn</a>
+        <br>
+        You can also see my CV
+        <a href="https://docs.google.com/document/d/1_ogZ_d_8SVoePKmMa6p56-RBGn8TIXrO9yFX7etmMqE/edit?usp=sharing"
+          target="_blank" style="color:var(--color-text-primary);text-decoration:underline;font-weight:400;">HERE</a>!
+      </div>
+      <div class="about-intro-photo" style="position:relative;">
+        <img src="me.png" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div
+        style="display:flex;align-items:center;justify-content:center;text-align:center;font-size:10px;color:var(--color-text-tertiary);line-height:1.6;">
+        MY FIRST PROFILE PICTURE!<br>THE PERSON BEHIND THE PAPERS..🤓
+      </div>
+    </div>
+    <div class="about-statement" style="grid-template-columns:160px 1fr 160px 80px;">
+      <div class="about-stmt-label">Research Statement</div>
+      <div class="about-stmt-text">
+        <p>My research lies at the intersection of HCI and Material-Driven Design, with a strong focus on multisensory
+          play and inclusive experience. I study, design, and develop interactive systems that leverage the unique
+          physical properties of unconventional materials — such as plants, ice, and thermochromic elements — to create
+          expressive digital experiences. Recently, I have been exploring the integration of living materiality and
+          ephemeral features into digital
+          games to rethink interactivity and investigate how sensory-rich feedback can enhance user engagement and
+          emotional resonance. While my research is closely related to game enthusiasts, exhibition audiences, and DHH
+          communities, I am
+          also interested in exploring the potential of generative AI and physical computing to build adaptive
+          environments.</p>
+      </div>
+      <div class="about-stmt-photo" style="position:relative;">
+        <img src="me-1.jpg" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div>
+        style="display:flex;align-items:center;justify-content:center;text-align:center;font-size:10px;color:var(--color-text-tertiary);line-height:1.6;">
+        ME AT UIST 2025 BUSAN,<br>PRESENTING SILENT 🤫 SUSPENSE 👻
+      </div>
+    </div>
+    <div class="about-interests">
+      <div class="ri-label">Research Interest</div>
+      <div style="display:flex;align-items:center;margin-bottom:30px;">
+        <span class="ri-tag" style="margin-left:130px;">Material-Driven Design</span>
+        <span class="ri-line"></span>
+        <span class="ri-tag" style="margin-right:130px;">Digital Game</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:start;margin-bottom:28px;">
+        <div style="display:flex;gap:20px;justify-content:flex-start;padding-left:130px;">
+          <div class="ri-proj" onclick="show('proj-tp')">
+            <div class="ri-thumb" style="background:#ffffff;"><img src="tei2024-3.png"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div><span class="ri-lbl">Thermo-Play</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:20px;justify-content:center;">
+          <div class="ri-proj" onclick="show('proj-wpp')">
+            <div class="ri-thumb" style="background:#ffffff;"><img src="chi2026-3.png"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div><span class="ri-lbl">When Plants Play</span>
+          </div>
+          <div class="ri-proj" onclick="show('proj-icy')">
+            <div class="ri-thumb" style="background:#ffffff;"><img src="dis2024-3.png"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div><span class="ri-lbl">ICY Interfaces</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:flex-end;padding-right:90px;">
+          <div class="ri-proj" onclick="show('proj-gb')">
+            <div class="ri-thumb" style="background:#ffffff;"><img src="chilbw2023-3.png"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div><span class="ri-lbl">Glow the Buzz</span>
+          </div>
+        </div>
+      </div>
+      <div
+        style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;align-items:center;margin-top:60px;margin-bottom:30px;">
+        <div style="display:flex;justify-content:center;">
+          <span class="ri-tag">Human-Nature Interaction</span>
+        </div>
+        <div style="display:flex;justify-content:center;">
+          <span class="ri-tag">Multisensory Experience</span>
+        </div>
+        <div></div>
+        <div style="display:flex;justify-content:center;">
+          <span class="ri-tag">Inclusivity</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;align-items:start;">
+        <div style="display:flex;justify-content:center;">
+          <div class="ri-proj" onclick="show('proj-pp')">
+            <div class="ri-thumb" style="background:#ffffff;"><img src="siggraph2025-3.png"
+                style="width:100%;height:100%;object-fit:cover;"></div>
+            <span class="ri-lbl">Plant.play()</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:center;">
+          <div class="ri-proj" onclick="show('proj-sb')">
+            <div class="ri-thumb" style="background:#ffffff;"><img src="50000-3.png"
+                style="width:100%;height:100%;object-fit:cover;"></div>
+            <span class="ri-lbl">50,000 Timepieces</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:center;">
+          <div class="ri-proj" onclick="show('proj-ss')">
+            <div class="ri-thumb" style="background:#ffffff;"><img src="uist2025-3.png"
+                style="width:100%;height:100%;object-fit:cover;"></div>
+            <span class="ri-lbl">Silent Suspense</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:center;">
+          <div class="ri-proj" onclick="show('proj-dhh')">
+            <div class="ri-thumb" style="background:#ffffff;"><img src="dis2026-2.png"
+                style="width:100%;height:100%;object-fit:cover;"></div>
+            <span class="ri-lbl">DHH Music Education</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS LIST -->
+  <div class="page" id="page-projects">
+    <div class="prop-head-single">
+      <div class="prop-label">Projects</div>
+      <div class="prop-sub" style="margin-top:3px;">Selected projects made with strong passion and love (2021 – 2026)
+      </div>
+    </div>
+    <div class="proj-grid">
+      <div class="proj-card" onclick="show('proj-wpp')">
+        <div class="proj-img" style="background:#ffffff;">
+          <img src="chi2026-4.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="proj-body">
+          <div class="proj-id">CHI 2026 · Full Paper · 🏆 Best Paper Award</div>
+          <div class="proj-title">When Plants Play</div>
+          <div class="proj-desc">Rethinking Plant Materiality in Digital Games</div>
+          <div class="proj-tags"><span class="proj-tag">Living Materials</span><span class="proj-tag">Plants</span><span
+              class="proj-tag">Digital Game Experience</span>
+          </div>
+        </div>
+      </div>
+      <div class="proj-card" onclick="show('proj-pp')">
+        <div class="proj-img" style="background:#ffffff;">
+          <img src="siggraph2025-4.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="proj-body">
+          <div class="proj-id">SIGGRAPH 2025 · Art Gallery</div>
+          <div class="proj-title">Plant.play()</div>
+          <div class="proj-desc">Interactive installation reimagining the relationship between plants, humans, and
+            digital space</div>
+          <div class="proj-tags"><span class="proj-tag">Installation</span><span class="proj-tag">Exhibition</span><span
+              class="proj-tag">Plants</span><span class="proj-tag">Digital Game</span>
+          </div>
+        </div>
+      </div>
+      <div class="proj-card" onclick="show('proj-icy')">
+        <div class="proj-img" style="background:#ffffff;">
+          <img src="dis2024-4.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="proj-body">
+          <div class="proj-id">DIS 2024 · Full Paper</div>
+          <div class="proj-title">ICY Interfaces</div>
+          <div class="proj-desc">Exploration of Ice’s Unique Ephemeral Features for Digital Game User Experience</div>
+          <div class="proj-tags"><span class="proj-tag">Ephemeral Materials</span><span class="proj-tag">Digital Game
+              Experience</span><span class="proj-tag">In-game Navigation</span>
+          </div>
+        </div>
+      </div>
+      <div class="proj-card" onclick="show('proj-tp')">
+        <div class="proj-img" style="background:#ffffff;">
+          <img src="tei2024-4.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="proj-body">
+          <div class="proj-id">TEI 2024 · Full Paper</div>
+          <div class="proj-title">Thermo-Play</div>
+          <div class="proj-desc">Exploring the Playful Qualities of Thermochromic Materials</div>
+          <div class="proj-tags"><span class="proj-tag">Materiality</span><span
+              class="proj-tag">Thermochromism</span><span class="proj-tag">Playfulness</span>
+          </div>
+        </div>
+      </div>
+      <div class="proj-card" onclick="show('proj-ss')">
+        <div class="proj-img" style="background:#ffffff;">
+          <img src="uist2025-4.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="proj-body">
+          <div class="proj-id">UIST 2025 · Poster · GwangJu Design Biennale 2025</div>
+          <div class="proj-title">Silent Suspense</div>
+          <div class="proj-desc">Multimodal Haptics for Horror Film Experiences for Deaf and Hard-of-Hearing (DHH)
+            Audiences</div>
+          <div class="proj-tags"><span class="proj-tag">Deaf and Hard-of-Hearing</span><span
+              class="proj-tag">Haptics/span></div>
+        </div>
+      </div>
+      <div class="proj-card" onclick="show('proj-dhh')">
+        <div class="proj-img" style="background:#ffffff;">
+          <img src="dis2026-4.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="proj-body">
+          <div class="proj-id">DIS 2026 · Full Paper + Ministry of Science and ICT Award</div>
+          <div class="proj-title">DHH Music Education</div>
+          <div class="proj-desc">Co-designing Haptics for DHH Music Education with a Reconfigurable
+            Prototyping System</div>
+          <div class="proj-tags"><span class="proj-tag">Deaf and Hard-of-Hearing</span><span
+              class="proj-tag">Co-design</span><span class="proj-tag">Haptics</span></div>
+        </div>
+      </div>
+      <div class="proj-card" onclick="show('proj-gb')">
+        <div class="proj-img" style="background:#ffffff;">
+          <img src="chilbw2023-4.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="proj-body">
+          <div class="proj-id">CHI 2023 · Extended Abstract · 🏆 Student Game Competition Finalist</div>
+          <div class="proj-title">Glow the Buzz</div>
+          <div class="proj-desc">VR puzzle adventure game mainly played through haptic feedback</div>
+          <div class="proj-tags"><span class="proj-tag">VR</span><span class="proj-tag">Digital Game
+              Experience</span><span class="proj-tag">Haptics</span></div>
+        </div>
+      </div>
+      <div class="proj-card" onclick="show('proj-50k')">
+        <div class="proj-img" style="background:#ffffff;">
+          <img src="50000-4.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="proj-body">
+          <div class="proj-id">Seoul Design Festival 2021 + Retail</div>
+          <div class="proj-title">50,000 Timepieces</div>
+          <div class="proj-desc">Crafts and experiments proceeded with the concept of the intangible element called
+            'time'</div>
+          <div class="proj-tags"><span class="proj-tag">Exhibition</span><span class="proj-tag">Retail</span><span
+              class="proj-tag">Product Design</span><span class="proj-tag">Materiality</span></div>
+        </div>
+      </div>
+      <div class="proj-card" onclick="show('proj-worlding')">
+        <div class="proj-img" style="background:#ffffff;">
+          <img src="worlding2026-1.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="proj-body">
+          <div class="proj-id">Under Review 🤞</div>
+          <div class="proj-title">Plant.play(mode="worlding");</div>
+          <div class="proj-desc">Biological life grows an autonomous digital infrastructure</div>
+          <div class="proj-tags"><span class="proj-tag">Living Materials</span><span class="proj-tag">Plants</span><span
+              class="proj-tag">Digital Ecosystem</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT PAGES -->
+  <div class="page" id="page-proj-wpp">
+    <div class="proj-page-header">
+      <div class="proj-page-left">
+        <span class="proj-back" onclick="show('projects')">← Projects</span>
+        <div>
+          <div class="proj-page-title">When Plants Play</div>
+          <div class="proj-page-venue">Rethinking Plant Materiality in Digital Games</div>
+        </div>
+        <p class="proj-abstract">Plant.play() is a novel digital game system where a living plant acts as the sole
+          player in a pet-simulation game, driving in-game actions through its bioelectrical signals, environmental
+          data, and circadian rhythms, with humans engaging only as observers. An in-the-wild study revealed that
+          visitors initially sought direct control but then shifted to interpreting the plant's slow, unpredictable, and
+          impartial behaviors as meaningful gameplay, fostering curiosity and attentive observation. Participants formed
+          emotional connections with both the plant and its virtual pet, leading to reflections on care, empathy, and
+          their broader relationships with nonhuman beings, demonstrating how plant materiality can invite new forms of
+          interactive engagement.</p>
+        <a class="proj-page-link" href="#" target="_blank">Full Paper Link 🌱</a>
+      </div>
+      <div class="proj-page-right">
+        <div class="proj-meta-block">
+          <div class="proj-meta-row"><span class="proj-meta-key">PERIOD</span><span class="proj-meta-val">2024.04 –
+              2025.09</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">TYPE</span><span class="proj-meta-val">Research ·
+              HCI</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">ROLE</span><span class="proj-meta-val">Lead Researcher
+              & Designer <br> (Individual Project)</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">VENUE</span><span class="proj-meta-val"><a
+                href="https://chi2026.acm.org" target="_blank"
+                style="color:var(--color-text-secondary);text-decoration:none;">ACM CHI Full Paper 2026 🔗</a></span>
+          </div>
+          <div class="proj-meta-row"><span class="proj-meta-key">KEYWORDS</span><span class="proj-meta-val">Materiality
+              · Plant · Digital Game · <br> Plant-computer interaction</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="proj-gallery">
+      <div class="proj-gallery-cell" style="grid-column: span 3; aspect-ratio: 5/3;">
+        <img src="chi2026-5.png" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+    </div>
+  </div>
+  <div class="page" id="page-proj-icy">
+    <div class="proj-page-header">
+      <div class="proj-page-left">
+        <span class="proj-back" onclick="show('projects')">← Projects</span>
+        <div>
+          <div class="proj-page-title">ICY Interfaces</div>
+          <div class="proj-page-venue">Exploration of Ice’s Ephemeral Features for Digital
+            Game User Experience</div>
+        </div>
+        <!-- abstract 여기로 이동 -->
+        <p class="proj-abstract">This research introduces "ICY Interfaces" (MeltPress, FrostPad, and IceSquish), a
+          series of digital game controllers that leverage the ephemeral qualities of ice to create novel user
+          experiences. Through material exploration, a co-creation workshop, and a user study, the authors demonstrate
+          how ice's physical disappearance, dynamic sensory changes during melting, and inherent unpredictability
+          profoundly influence gameplay, player engagement, and foster unique interactive challenges. The findings
+          highlight that ice's ephemerality shapes time perception, builds player attachment, encourages social
+          interaction, raises environmental awareness, and offers diverse sensory experiences that enhance immersion and
+          evoke nostalgia in digital gaming.</p>
+        <div style="display:flex;gap:8px;">
+          <a class="proj-page-link" href="https://dl.acm.org/doi/abs/10.1145/3643834.3660725" target="_blank">Full Paper
+            Link 🧊</a><a class="proj-page-link" href="https://youtu.be/Nie_M6VEnIQ" target="_blank">Demo Video Link
+            🎬</a>
+        </div>
+      </div>
+      <div class="proj-page-right">
+        <!-- meta 여기로 이동 -->
+        <div class="proj-meta-block">
+          <div class="proj-meta-row"><span class="proj-meta-key">PERIOD</span><span class="proj-meta-val">2022.11 –
+              2024.01</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">TYPE</span><span class="proj-meta-val">Research ·
+              HCI</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">ROLE</span><span class="proj-meta-val">Lead Researcher
+              & Designer <br> (Individual
+              Project)</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">VENUE</span><span class="proj-meta-val"><a
+                href="https://dis.acm.org/2024/" target="_blank"
+                style="color:var(--color-text-secondary);text-decoration:none;">ACM DIS Full Paper 2024 🔗</a></span>
+          </div>
+
+          <div class="proj-meta-row"><span class="proj-meta-key">KEYWORDS</span><span class="proj-meta-val">Ephemeral
+              User Interface · Ephemerality · Materiality
+              · Ice · Digital Game</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="proj-gallery">
+      <div class="proj-gallery-cell" style="grid-column: span 3; aspect-ratio: 5/3;">
+        <img src="dis2024-5.png" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+    </div>
+  </div>
+  <div class="page" id="page-proj-pp">
+    <div class="proj-page-header">
+      <div class="proj-page-left">
+        <span class="proj-back" onclick="show('projects')">← Projects</span>
+        <div>
+          <div class="proj-page-title">Plant.play()</div>
+        </div>
+        <p class="proj-abstract">Plant.play() is an interactive installation reimagining human-plant-digital
+          relationships by enabling a real plant to act as the primary player controlling a virtual pet simulation game.
+          The system uses various sensors to translate the plant's physiological states and environmental interactions
+          into game inputs, with an Arduino Mega and Raspberry Pi processing this data into in-game decisions for the
+          pet. Through the plant's ongoing choices, the virtual pet's appearance and personality are uniquely shaped,
+          promoting a posthumanist perspective by presenting plants as active agents capable of engaging with digital
+          creations.</p>
+        <div style="display:flex;gap:8px;">
+          <a class="proj-page-link" href="https://dl.acm.org/doi/pdf/10.1145/3721249.3731636" target="_blank">Paper Link
+            🍀</a><a class="proj-page-link" href="https://youtu.be/kdHwOzQuNI8" target="_blank">Demo Video Link
+            🎬</a>
+        </div>
+      </div>
+      <div class="proj-page-right">
+        <div class="proj-meta-block">
+          <div class="proj-meta-row"><span class="proj-meta-key">PERIOD</span><span class="proj-meta-val">2024.03 –
+              2025.01</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">TYPE</span><span class="proj-meta-val">Interactive
+              Installation</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">ROLE</span><span class="proj-meta-val">Lead Artist
+              & Developer <br> (Individual
+              Project)</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">VENUE</span><span class="proj-meta-val"><a
+                href="https://s2025.siggraph.org" target="_blank"
+                style="color:var(--color-text-secondary);text-decoration:none;">ACM SIGGRAPH Art Gallery
+                2025 🔗</a></span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">KEYWORDS</span><span class="proj-meta-val">Materiality
+              · Plant · Posthumanism · <br> Plant Agency</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="proj-gallery">
+      <div class="proj-gallery-cell" style="grid-column: span 3; aspect-ratio: 5/3;">
+        <img src="siggraph2025-5.png" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+    </div>
+  </div>
+  <div class="page" id="page-proj-tp">
+    <div class="proj-page-header">
+      <div class="proj-page-left">
+        <span class="proj-back" onclick="show('projects')">← Projects</span>
+        <div>
+          <div class="proj-page-title">Thermo-Play</div>
+          <div class="proj-page-venue">Exploring the Playful Qualities of Thermochromic
+            Materials</div>
+        </div>
+        <p class="proj-abstract">This paper explores the playful qualities of thermochromic materials through the
+          creation and evaluation of four interactive projects. Evaluations using the PLEX framework and an ideation
+          workshop identified physicality, color-dynamicity, and gradualness as key elements that evoke playfulness,
+          particularly Captivation, Discovery, and Expression. The research provides new opportunities for designing
+          playful interactions with thermochromic materials while also highlighting their practical constraints and
+          diverse appeal.</p>
+
+        <div style="display:flex;gap:8px;">
+          <a class="proj-page-link" href="https://dl.acm.org/doi/pdf/10.1145/3623509.3633376" target="_blank">Full Paper
+            Link 🌡️</a><a class="proj-page-link" href="https://youtu.be/pNR3cZ-rVys" target="_blank">Demo Video Link
+            🎬</a>
+        </div>
+      </div>
+      <div class="proj-page-right">
+        <div class="proj-meta-block">
+          <div class="proj-meta-row"><span class="proj-meta-key">PERIOD</span><span class="proj-meta-val">2022.09 –
+              2023.08</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">TYPE</span><span class="proj-meta-val">Research ·
+              HCI</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">ROLE</span><span class="proj-meta-val"> Researcher &
+              Designer <br> (Group
+              Project)</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">VENUE</span><span class="proj-meta-val"><a
+                href="https://tei.acm.org/2024/" target="_blank"
+                style="color:var(--color-text-secondary);text-decoration:none;">ACM TEI Full Paper 2024 🔗</a></span>
+          </div>
+          <div class="proj-meta-row"><span class="proj-meta-key">KEYWORDS</span><span class="proj-meta-val">Materiality
+              · Thermochromism · Playfulness</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="proj-gallery">
+      <div class="proj-gallery-cell" style="grid-column: span 3; aspect-ratio: 5/3;">
+        <img src="tei2024-5.png" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+    </div>
+  </div>
+  <div class="page" id="page-proj-ss">
+    <div class="proj-page-header">
+      <div class="proj-page-left">
+        <span class="proj-back" onclick="show('projects')">← Projects</span>
+        <div>
+          <div class="proj-page-title">Silent Suspense</div>
+          <div class="proj-page-venue">Multimodal Haptics for Horror Film Experiences <br> for
+            Deaf and Hard-of-Hearing (DHH) Audiences</div>
+        </div>
+        <p class="proj-abstract">Silent Suspense presents four novel wrist-worn haptic devices (Texture, Locomotion,
+          Temperature, and Pressure) engineered to convey horror film suspense through tactile sensations for Deaf and
+          Hard-of-Hearing (DHH) audiences. A user study involving 12 DHH participants demonstrated that all devices
+          enhanced narrative engagement, with the Texture device performing most effectively in evoking emotional
+          responses. This work expands the design space for cinematic haptics, showing how diverse tactile modalities
+          can significantly improve accessibility and immersion in horror films for DHH viewers.</p>
+        <a class="proj-page-link" href="https://dl.acm.org/doi/full/10.1145/3746058.3758352" target="_blank">Full Paper
+          Link 👻</a>
+      </div>
+      <div class="proj-page-right">
+        <div class="proj-meta-block">
+          <div class="proj-meta-row"><span class="proj-meta-key">PERIOD</span><span class="proj-meta-val">2025.01 –
+              2025.08</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">TYPE</span><span class="proj-meta-val">Research ·
+              HCI</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">ROLE</span><span class="proj-meta-val">Project Manager
+              <br> (Group
+              Project)</span></div>
+          <div class="proj-meta-row">
+            <span class="proj-meta-key">VENUE</span>
+
+            <span class="proj-meta-val">
+              <a href="https://uist.acm.org/2025/" target="_blank"
+                style="color:var(--color-text-secondary);text-decoration:none;">
+                ACM UIST Poster 2025 🔗
+              </a>
+              <br>
+              <a href="https://www.gdb.or.kr/intro.php" target="_blank"
+                style="color:var(--color-text-secondary);text-decoration:none;">
+                GwangJu Design Biennale 2025 🔗
+              </a>
+            </span>
+          </div>
+          <div class="proj-meta-row"><span class="proj-meta-key">KEYWORDS</span><span
+              class="proj-meta-val">Accessibility
+              · Haptics · Horror Film <br> Experience · Multimodality</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="proj-gallery">
+      <div class="proj-gallery-cell" style="grid-column: span 3; aspect-ratio: 5/3;">
+        <img src="uist2025-5.png" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+    </div>
+  </div>
+  <div class="page" id="page-proj-dhh">
+    <div class="proj-page-header">
+      <div class="proj-page-left">
+        <span class="proj-back" onclick="show('projects')">← Projects</span>
+        <div>
+          <div class="proj-page-title">Co-designing Haptics for Deaf and Hard-of-Hearing Music Education <br>
+            with a Reconfigurable Prototyping System</div>
+        </div>
+        <!-- abstract 여기로 이동 -->
+        <p class="proj-abstract">This work introduces a co-design approach for developing haptic cues to enhance music
+          education for Deaf and hard-of-hearing (DHH) learners, addressing challenges posed by limited auditory access.
+          Researchers utilized a novel reconfigurable haptic prototyping system, featuring modular tactors and
+          MIDI-triggered mapping, in co-design workshops with educator-learner dyads to enable hands-on exploration and
+          iteration. Findings indicate that vibrotactile cues can be pedagogically effective, making musical concepts
+          tangible as formative feedback and serving as interpretable, sharable references for inclusive music learning.
+        </p>
+        <a class="proj-page-link" href="#" target="_blank">Full Paper Link (to be updated) 📄</a>
+      </div>
+      <div class="proj-page-right">
+        <!-- meta 여기로 이동 -->
+        <div class="proj-meta-block">
+          <div class="proj-meta-row"><span class="proj-meta-key">PERIOD</span><span class="proj-meta-val">2024.05 –
+              2026.01</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">TYPE</span><span class="proj-meta-val">Research ·
+              HCI</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">ROLE</span><span class="proj-meta-val">Researcher
+              <br> (Group
+              Project)</span></div>
+          <div class="proj-meta-row">
+            <span class="proj-meta-key">VENUE</span>
+
+            <span class="proj-meta-val">
+              <a href="https://dis.acm.org/2026/" target="_blank"
+                style="color:var(--color-text-secondary);text-decoration:none;">
+                ACM DIS Full Paper 2026 🔗
+              </a>
+              <br>
+              <a href="https://www.msit.go.kr/eng/index.do" target="_blank"
+                style="color:var(--color-text-secondary);text-decoration:none;">
+                Ministry of Science and ICT Award 🔗
+              </a>
+            </span>
+          </div>
+          <div class="proj-meta-row"><span class="proj-meta-key">KEYWORDS</span><span class="proj-meta-val">Deaf and
+              Hard-of-Hearing (DHH)
+              · <br> Music Education · Haptic · Co-design · <br> Accessibility </span></div>
+        </div>
+      </div>
+    </div>
+    <div class="proj-gallery">
+      <div class="proj-gallery-cell" style="grid-column: span 3; aspect-ratio: 5/3;">
+        <img src="dis2026-5.png" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+    </div>
+  </div>
+  <div class="page" id="page-proj-gb">
+    <div class="proj-page-header">
+      <div class="proj-page-left">
+        <span class="proj-back" onclick="show('projects')">← Projects</span>
+        <div>
+          <div class="proj-page-title">Glow the Buzz</div>
+          <div class="proj-page-venue">A VR Puzzle Adventure Game Mainly Played Through Haptic Feedback</div>
+        </div>
+        <p class="proj-abstract">This work introduces "Glow the Buzz," a VR puzzle adventure game designed to
+          investigate the potential of haptic feedback as the primary mode of interaction, moving beyond its traditional
+          supplementary role. The game features three haptic-centric puzzle types—rhythm, texture, and direction—which
+          were refined through iterative playtests to explore how players distinguish diverse tactile stimuli using
+          wearable haptic devices. The research demonstrates that haptic feedback can successfully serve as a core
+          gameplay element, enhancing immersion and enabling problem-solving, and offers insights into effective design
+          for discriminable haptic stimuli.</p>
+        <div style="display:flex;gap:8px;">
+          <a class="proj-page-link" href="https://dl.acm.org/doi/pdf/10.1145/3544549.3583827" target="_blank">Full Paper
+            Link 🐝</a><a class="proj-page-link" href="https://youtu.be/InQQkXJosP8" target="_blank">Demo Video Link
+            🎬</a>
+        </div>
+      </div>
+      <div class="proj-page-right">
+        <div class="proj-meta-block">
+          <div class="proj-meta-row"><span class="proj-meta-key">PERIOD</span><span class="proj-meta-val">2022.09 –
+              2023.01</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">TYPE</span><span class="proj-meta-val">Research ·
+              HCI</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">ROLE</span><span class="proj-meta-val">Researcher
+              & Designer <br> (Group
+              Project)</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">VENUE</span><span class="proj-meta-val"><a
+                href="https://chi2023.acm.org/" target="_blank"
+                style="color:var(--color-text-secondary);text-decoration:none;">ACM CHI Extended-Abstract 2023
+                🔗</a></span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">KEYWORDS</span><span class="proj-meta-val">Virtual
+              Reality
+              · VR Games · Haptics </span></div>
+        </div>
+      </div>
+    </div>
+    <div class="proj-gallery">
+      <div class="proj-gallery-cell" style="grid-column: span 3; aspect-ratio: 5/3;">
+        <img src="chilbw2023-5.png" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+    </div>
+  </div>
+  <div class="page" id="page-proj-50k">
+    <div class="proj-page-header">
+      <div class="proj-page-left">
+        <span class="proj-back" onclick="show('projects')">← Projects</span>
+        <div>
+          <div class="proj-page-title">50,000 Timepieces</div>
+        </div>
+        <p class="proj-abstract">During my time at <a href="https://studio-when.com/50000_main" target="_blank"
+            style="color:var(--color-text-primary);font-style:italic;">Studio When</a>, I independently spearheaded the
+          "50000 Clock Projects." What began as a lighthearted joke—"Let's make 50,000 clocks"—evolved into a rigorous
+          exploration of form and materiality. Each
+          "one-in-a-million" piece was handcrafted through daily experimentation, aiming to redefine how we perceive the
+          passage of time in the absence of numbers. The project ultimately reached a broader audience: the pieces were
+          successfully sold at prominent retail shops like <a href="https://www.ca-va.life" target="blank"
+            style="color:var(--color-text-primary); font-style:italic;">CAVA LIFE</a>,
+          <a href="https://www.29cm.co.kr" target="blank"
+            style="color:var(--color-text-primary); font-style:italic;">29CM</a>
+          , and <a href="https://heights-store.com" target="blank"
+            style="color:var(--color-text-primary); font-style:italic;">Heights Store</a>,
+          , and showcased
+          at various exhibitions including the
+          <a href="https://seoul.designfestival.co.kr" target="blank"
+            style="color:var(--color-text-primary); font-style:italic;">Seoul Design Festival</a>
+          .
+      </div>
+      <div class="proj-page-right">
+        <div class="proj-meta-block">
+          <div class="proj-meta-row"><span class="proj-meta-key">PERIOD</span><span class="proj-meta-val">2021.04
+              –
+              2021.12</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">TYPE</span><span class="proj-meta-val">Experimental
+              Product · Product Design</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">ROLE</span><span class="proj-meta-val">Lead
+              Product Designer & Maker</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">KEYWORDS</span><span class="proj-meta-val">Materiality
+              · Clocks · Lifestyle · <br> Time Perception</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="proj-gallery">
+      <div class="proj-gallery-cell" style="grid-column: span 3; aspect-ratio: 5/3;">
+        <img src="50000-5.png" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+    </div>
+  </div>
+  <div class="page" id="page-proj-worlding">
+    <div class="proj-page-header">
+      <div class="proj-page-left">
+        <span class="proj-back" onclick="show('projects')">← Projects</span>
+        <div>
+          <div class="proj-page-title">Plant.play(mode="worlding";)</div>
+        </div>
+        <p class="proj-abstract">Coming Soon / To be updated ⚠️</p>
+        <div style="display:flex;gap:8px;">
+          <a class="proj-page-link" href="" target="_blank">Full Paper Link (to be updated) 📄</a><a
+            class="proj-page-link" href="https://youtu.be/7z7qm3Ibfg0" target="_blank">Video Link
+            🎬</a>
+        </div>
+      </div>
+      <div class="proj-page-right">
+        <div class="proj-meta-block">
+          <div class="proj-meta-row"><span class="proj-meta-key">PERIOD</span><span class="proj-meta-val">2025.09 –
+              2026.03</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">TYPE</span><span class="proj-meta-val">Installation ·
+              Interactive Art</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">ROLE</span><span class="proj-meta-val">Lead Designer
+              (Group
+              Project)</span></div>
+          <div class="proj-meta-row"><span class="proj-meta-key">VENUE</span><span class="proj-meta-val">TBD</span>
+          </div>
+          <div class="proj-meta-row"><span class="proj-meta-key">KEYWORDS</span><span class="proj-meta-val">Materiality
+              · Plant · Plant Agenct · <br> Digital Game</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="proj-gallery">
+        <div class="proj-gallery-cell" style="grid-column: span 3; aspect-ratio: 5/3;">
+          <img src="your-image.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+      </div> -->
+  </div>
+
+  <!-- PUBLICATIONS -->
+  <div class="page" id="page-publications">
+    <div class="pub-page">
+      <div class="pub-filters">
+        <button class="filter-btn active" onclick="filterPub('all',this)">all</button>
+        <button class="filter-btn" onclick="filterPub('first',this)">first author</button>
+        <button class="filter-btn" onclick="filterPub('materiality',this)">Materiality</button>
+        <button class="filter-btn" onclick="filterPub('game',this)">Game</button>
+        <button class="filter-btn" onclick="filterPub('others',this)">Others</button>
+      </div>
+      <div id="pub-list"></div>
+    </div>
+  </div>
+
+  <!-- C(A)RT -->
+  <div class="page" id="page-cart">
+    <div class="cart-header"><span class="cart-title-main">C(a)rt</span><span class="cart-subtitle">photo · art ·
+        movie
+        · music · books · ideas · life ··· </span></div>
+    <div class="cart-grid">
+      <div class="cart-cell cart-wide">
+        <div class="cart-img" style="background:#ffffff00;"
+          onclick="document.getElementById('lightbox-img').src='photo1.jpg'; document.getElementById('lightbox').classList.add('active');">
+          <img src="photo1.jpg" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">PHOTO</div>
+          <div class="cart-cap-title">Tokyo, July 2020</div>
+          <div class="cart-cap-desc">Photo taken with Fuji X-T20.</div>
+        </div>
+      </div>
+      <div class="cart-cell">
+        <div class="cart-img" style="background:#ffffff00;">
+          <img src="movie1.jpg" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">MOVIE</div>
+          <div class="cart-cap-title">Prometheus (2012)</div>
+          <div class="cart-cap-desc">Pure inspiration just from watching this.</div>
+        </div>
+      </div>
+      <div class="cart-cell">
+        <div class="cart-img" style="background:#ffffff00;">
+          <img src="movie2.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">MOVIE</div>
+          <div class="cart-cap-title">Project Hail Mary (2026)</div>
+          <div class="cart-cap-desc">Must watch 👎</div>
+        </div>
+      </div>
+      <div class="cart-cell">
+        <div class="cart-img" style="background:#ffffff00;">
+          <img src="daily1.jpeg" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">LIFE</div>
+          <div class="cart-cap-title">Umbrella Charm</div>
+          <div class="cart-cap-desc">I try to fill my daily surroundings full of cute stuffs!</div>
+        </div>
+      </div>
+      <div class="cart-cell">
+        <div class="cart-img" style="background:#ffffff00;"
+          onclick="document.getElementById('lightbox-img').src='photo2.JPG'; document.getElementById('lightbox').classList.add('active');">
+          <img src="photo2.JPG" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">PHOTO</div>
+          <div class="cart-cap-title">Daejeon, February 2025</div>
+          <div class="cart-cap-desc">Photo taken with Fuji X100VI.</div>
+        </div>
+      </div>
+      <div class="cart-cell cart-wide">
+        <div class="cart-img" style="background:#ffffff00;">
+          <img src="project3.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">GROUP PROJECT FROM INTERACTIVE SPACE CLASS</div>
+          <div class="cart-cap-title">Installation: Confess to Stone &nbsp;<a href="https://youtu.be/cH7cmo6JvJI"
+              target="_blank" style="font-size:12px;color:var(--color-text-tertiary);text-decoration:none;">→ Watch
+              video on YouTube</a>
+          </div>
+          <div class="cart-cap-desc">What's with the stones? We viewed them as ancient
+            observers with a silent wisdom that far outlasts humanity.
+          </div>
+        </div>
+      </div>
+      <div class="cart-cell">
+        <div class="cart-img" style="background:#000000;">📍</div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">WEBSITE</div>
+          <div class="cart-cap-title"> <a href="https://materialaesthetics.com" target="_blank"
+              style="color:var(--color-text-primary);text-decoration:underline;">materialaesthetics.com</a></div>
+          <div class="cart-cap-desc">Material Aesthetics Lab (TU/e)</div>
+        </div>
+      </div>
+      <div class="cart-cell">
+        <div class="cart-img" style="background:#ffffff00;"
+          onclick="document.getElementById('lightbox-img').src='photo3.JPG'; document.getElementById('lightbox').classList.add('active');">
+          <img src="photo3.JPG" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">PHOTO</div>
+          <div class="cart-cap-title">Maldives, March 2025</div>
+          <div class="cart-cap-desc">Photo taken with Leica Minilux.</div>
+        </div>
+      </div>
+      <div class="cart-cell">
+        <div class="cart-img" style="background:#ffffff00;"
+          onclick="document.getElementById('lightbox-img').src='photo6.JPG'; document.getElementById('lightbox').classList.add('active');">
+          <img src="photo6.JPG" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">PHOTO</div>
+          <div class="cart-cap-title">Kawaguchiko, April 2019</div>
+          <div class="cart-cap-desc">Photo taken with Fuji X-T20.</div>
+        </div>
+      </div>
+      <div class="cart-cell">
+        <div class="cart-img" style="background:#ffffff00;">
+          <img src="life2.jpeg" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">LIFE</div>
+          <div class="cart-cap-title">iPod Class 5th Gen</div>
+          <div class="cart-cap-desc">There’s something so satisfying about analog mechanics.</div>
+        </div>
+      </div>
+      <div class="cart-cell cart-wide">
+        <div class="cart-img" style="background:#ffffff00;"
+          onclick="document.getElementById('lightbox-img').src='project1.png'; document.getElementById('lightbox').classList.add('active');">
+          <img src="project1.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">GROUP PROJECT</div>
+          <div class="cart-cap-title">Modular Stackable Candles</div>
+          <div class="cart-cap-desc">We made modular candle set! It can turn into various-looking flowers.</div>
+        </div>
+      </div>
+      <div class="cart-cell">
+        <div class="cart-img" style="background:#ffffff00;">
+          <img src="movie3.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">MOVIE</div>
+          <div class="cart-cap-title">Everything Everywhere All at Once</div>
+          <div class="cart-cap-desc">It was a total mental reset.</div>
+        </div>
+      </div>
+      <div class="cart-cell">
+        <div class="cart-img" style="background:#ffffff00;">
+          <img src="game1.png" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="cart-cap">
+          <div class="cart-cap-cat">GAME</div>
+          <div class="cart-cap-title">Pokémon Pokopia</div>
+          <div class="cart-cap-desc">Daily detox.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lightbox" id="lightbox" onclick="this.classList.remove('active')">
+    <img id="lightbox-img" src="">
+  </div>
+  <div class="bottombar">
+    <span style="color:var(--color-text-secondary);cursor:pointer;" onclick="show('about')">Contact →</span>
+    <span class="bottombar-mid">Yoonji Lee · 이윤지 · Made with Love🖤 </span>
+    <a href="https://www.instagram.com/oongbear?igsh=eW8wM2kzbDJ4Z3ds&utm_source=qr" target="_blank"
+      style="color:var(--color-text-tertiary);text-decoration:none;text-align:right;"
+      onmouseenter="this.textContent='I collect vintage toys!'"
+      onmouseleave="this.textContent='Link to my Secret Hobby'">Link to my secret hobby</a>
+  </div>
+
+  <script>
+    document.querySelectorAll('.g-cell').forEach(cell => {
+      cell.addEventListener('mouseenter', function () {
+        var d = this.querySelector('.img-default');
+        var h = this.querySelector('.img-hover');
+        if (d) d.style.opacity = '0';
+        if (h) h.style.opacity = '1';
+      });
+      cell.addEventListener('mouseleave', function () {
+        var d = this.querySelector('.img-default');
+        var h = this.querySelector('.img-hover');
+        if (d) d.style.opacity = '1';
+        if (h) h.style.opacity = '0';
+      });
+    });
+
+    /* ================================================================
+       PUBLICATIONS DATA
+       tags: "first" | "materiality" | "game" | "others"
+       authors: [name, equalContrib]  — true = * 표시
+       pdf / doi: "#" 을 실제 URL로 교체하세요
+       ================================================================ */
+    var pubs = [
+      { year: 2026, title: "When Plants Play: Rethinking Plant Materiality in Digital Games", authors: [["Yoonji Lee", false], ["Chang Hee Lee", false]], venue: "CHI 2026", type: "Full Paper", badge: "Best Paper Award", tags: ["first", "materiality", "game"], pdf: "https://drive.google.com/file/d/1YDqUbxfT332zD7_c2GFxjQc2XqSWKbDc/view?usp=sharing", doi: "not yet" },
+      { year: 2026, title: "Sonic Being: Imagining Sound as an Independent Entity", authors: [["Jongik Jeon", false], ["Yoonji Lee", false], ["Chang Hee Lee", false]], venue: "DIS 2026", type: "Full Paper", badge: "", tags: ["others"], pdf: "not yet", doi: "not yet" },
+      { year: 2026, title: "Co-designing Haptics for Deaf and Hard-of-Hearing Music Education with a Reconfigurable Prototyping System", authors: [["Sungyong Shin", false], ["HyeonBeom Yi", false], ["Dasom Choi", false], ["Yoonji Lee", false], ["Chi Yoon Jeong", false], ["Chang Hee Lee", false], ["Woohun Lee", false]], venue: "DIS 2026", type: "Full Paper", badge: "", tags: ["others"], pdf: "not yet", doi: "not yet" },
+      { year: 2025, title: "Plant.play()", authors: [["Yoonji Lee", false], ["Ali Asadipour", false], ["Chang Hee Lee", false]], venue: "SIGGRAPH 2025", type: "Art Gallery", badge: "", tags: ["first", "materiality", "game"], pdf: "https://drive.google.com/file/d/1K6b6sb7bQZqSdFfOvLnGxG4wS7C52dRk/view?usp=sharing", doi: "https://doi.org/10.1145/3721249.3731636" },
+      { year: 2025, title: "Silent Suspense: Multimodal Haptics for Horror Film Experiences for DHH Audiences", authors: [["Yoonji Lee", true], ["Jongik Jeon", true], ["Byoungjae Kim", true], ["Gurim Kim", false], ["Geumjin Lee", false], ["Chang Hee Lee", false]], equalContrib: true, venue: "UIST 2025", type: "Poster", badge: "", tags: ["first", "materiality"], pdf: "https://drive.google.com/file/d/1DLD_a85p11fIFyKE53hko3R3_bVvPrRy/view?usp=sharing", doi: "https://dl.acm.org/doi/full/10.1145/3746058.3758352" },
+      { year: 2024, title: "ICY Interfaces: Exploration of Ice's Ephemeral Features for Digital Game User Experience", authors: [["Yoonji Lee", false], ["Chang Hee Lee", false]], venue: "DIS 2024", type: "Full Paper", badge: "", tags: ["first", "materiality", "game"], pdf: "https://drive.google.com/file/d/1NFR7n5dEYn13TWO-IGZgkaVB8xpRXBHT/view?usp=sharing", doi: "https://dl.acm.org/doi/abs/10.1145/3643834.3660725" },
+      { year: 2024, title: "Thermo-Play: Exploring the Playful Qualities of Thermochromic Materials", authors: [["Yoonji Lee", true], ["Haena Cho", true], ["Woohun Lee", false], ["Chang Hee Lee", false]], equalContrib: true, venue: "TEI 2024", type: "Full Paper", badge: "", tags: ["first", "materiality"], pdf: "https://drive.google.com/file/d/1SGZCG4l6gjSCiIKZ005vuItqi9QlC6UG/view?usp=sharing", doi: "https://dl.acm.org/doi/abs/10.1145/3623509.3633376" },
+      { year: 2023, title: "Glow the Buzz: a VR Puzzle Adventure Game Mainly Played Through Haptic Feedback", authors: [["Yoonji Lee", true], ["Sihyun Jeong", true], ["Hyun Ho Yun", true], ["Yeeun Han", true]], equalContrib: true, venue: "CHI 2023", type: "Extended Abstract", badge: "", tags: ["first", "game"], pdf: "https://drive.google.com/file/d/1966MPtwk6vqtyiPJTpxgvtBYwz9cjj8e/view?usp=sharing", doi: "https://dl.acm.org/doi/full/10.1145/3544549.3583827" },
+      { year: 2023, title: "Space-Grounded: A Drugless Antidepressant Inhalation Device", authors: [["Chang Hee Lee", false], ["Tibor Balint", false], ["Boram Chin", false], ["Manoj Kumar", false], ["Yoonji Lee", false], ["Haena Cho", false]], venue: "SpaceCHI 2023", type: "Full Paper", badge: "", tags: ["materiality"] },
+      { year: 2022, title: "Space-Grounded", authors: [["Chang Hee Lee", false], ["Tibor Balint", false], ["Boram Chin", false], ["Manoj Kumar", false], ["Yoonji Lee", false], ["Haena Cho", false]], venue: "IAC 2022", type: "Full Paper", badge: "", tags: ["materiality"], pdf: "https://drive.google.com/file/d/1xGE74_oZzLqqIHHRmvHLnM7MVzfAE_6r/view?usp=sharing" }
+    ];
+
+    var currentPub = 'all';
+    function filterPub(tag, btn) {
+      currentPub = tag;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderPub();
+    }
+    function renderPub() {
+      var filtered = currentPub === 'all' ? pubs : pubs.filter(p => p.tags.includes(currentPub));
+      var years = [...new Set(filtered.map(p => p.year))].sort((a, b) => b - a);
+      var html = '';
+      if (!filtered.length) { html = '<div style="font-family:IBM Plex Mono,monospace;font-size:11px;color:#999;padding:2rem 0;">No publications found.</div>'; }
+      else {
+        years.forEach(yr => {
+          var items = filtered.filter(p => p.year === yr);
+          html += '<div class="year-group"><div class="year-label">' + yr + '</div>';
+          items.forEach(p => {
+            var authHtml = p.authors.map(([name, star]) => {
+              var n = name === 'Yoonji Lee' ? '<span class="me">' + name + '</span>' : name;
+              return star ? n + '*' : n;
+            }).join(', ');
+            if (p.equalContrib) authHtml += ' <span style="font-size:13px;color:#999;">(*equal contribution)</span>';
+            html += '<div class="pub-item"><div class="pub-title">' + p.title + '</div>';
+            html += '<div class="pub-authors">' + authHtml + '</div>';
+            html += '<div class="pub-meta"><span class="pub-venue">' + p.venue + '</span><span>' + p.type + '</span>';
+            if (p.badge) html += '<span class="pub-badge">🏆 ' + p.badge + '</span>';
+            html += '<div class="pub-links">';
+            if (p.pdf) html += '<a class="pub-link" href="' + p.pdf + '" target="_blank">PDF →</a>';
+            if (p.doi) html += '<a class="pub-link" href="' + p.doi + '" target="_blank">DOI →</a>';
+            html += '</div>'; html += '</div></div>';
+          });
+          html += '</div>';
+        });
+      }
+      document.getElementById('pub-list').innerHTML = html;
+    }
+
+    function show(p) {
+      document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.topbar-nav a').forEach(x => x.classList.remove('active'));
+      document.getElementById('page-' + p).classList.add('active');
+      var m = { home: '', about: 'nav-about', projects: 'nav-projects', publications: 'nav-publications', cart: 'nav-cart' };
+      if (m[p] !== undefined && m[p] && document.getElementById(m[p])) document.getElementById(m[p]).classList.add('active');
+      if (p.startsWith('proj-')) document.getElementById('nav-projects').classList.add('active');
+      if (p === 'publications') renderPub();
+      history.pushState({ page: p }, '', '#' + p);
+      window.scrollTo(0, 0);
+    }
+    window.addEventListener('popstate', function (e) {
+      if (e.state && e.state.page) {
+        show(e.state.page);
+      } else {
+        show('home');
+      }
+    });
+
+    var d = new Date();
+    document.getElementById('top-date').textContent = '© 19.03.2026';
+    document.getElementById('bottom-no').textContent = 'Link to my Secret Hobby';
+
+    function emojiCursor(emoji) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 32;
+      canvas.height = 32;
+      const ctx = canvas.getContext('2d');
+      ctx.font = '24px serif';
+      ctx.fillText(emoji, 0, 24);
+      return canvas.toDataURL();
+    }
+
+    document.querySelectorAll('.ri-thumb').forEach(thumb => {
+      thumb.style.cursor = `url(${emojiCursor('🤓')}) 16 16, pointer`;
+    });
+
+  </script>
+</body>
+
+</html>
