@@ -1195,93 +1195,44 @@
         line-height: 1.65;
       }
 
+      /* HOME GRID */
       .home-grid {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
-        gap: 10px !important;
-        padding: 10px !important;
+        gap: 0 !important;
+        padding: 0 !important;
+      }
+
+      .g-cell {
+        border-left: 1px solid var(--color-border-tertiary);
+        border-bottom: 1px solid var(--color-border-tertiary);
+        overflow: hidden;
       }
 
       .g-wide {
         grid-column: span 2 !important;
       }
 
-      .home-grid img {
-        width: 100% !important;
-        height: auto !important;
-        max-width: 100% !important;
-        position: static !important;
-        transform: none !important;
-        object-fit: contain !important;
-      }
-
-      .home-image-item {
-        position: static !important;
-        transform: none !important;
-        width: 100% !important;
-        margin: 0 0 20px 0 !important;
-        opacity: 1 !important;
-      }
-
-      .home-image-item img {
-        position: static !important;
-        transform: none !important;
-        width: 100% !important;
-        height: auto !important;
-        cursor: pointer;
-        transition: none !important;
-      }
-
-      .home-image-caption {
-        position: relative !important;
-        top: 0 !important;
-        left: 0 !important;
-        transform: none !important;
-        padding-top: 8px;
-        display: block !important;
-      }
-
-      .g-cell {
-        border-left: 1px solid var(--color-border-tertiary);
-        overflow: hidden;
-      }
-
-      .g-wide {
-        grid-column: span 1;
-      }
-
       .g-img {
-        aspect-ratio: 16/10 !important;
+        aspect-ratio: 1 / 1 !important;
         width: 100% !important;
         height: auto !important;
-        display: block;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden !important;
+        background: var(--color-background-secondary);
         position: relative;
       }
 
-      .g-img,
       .g-wide .g-img {
-        aspect-ratio: 16/10;
-      }
-
-      .g-img,
-      .proj-img {
-        aspect-ratio: 1 / 1 !important;
-        /* 16/10보다 세로가 더 길어집니다. 더 높이고 싶으면 1/1 추천 */
-        width: 100% !important;
-        height: auto !important;
-        overflow: hidden !important;
-        background: var(--color-background-secondary);
-        /* 이미지 로딩 전 빈공간 색상 */
-      }
-
-      .g-wide .g-img {
-        aspect-ratio: 7 / 3 !important;
-        /* 가로로 아주 길고 세로는 짧은 비율 (예: 16/10 -> 21/9) */
-        height: auto !important;
+        aspect-ratio: 2 / 1 !important;
       }
 
       .g-cell .img-default {
-        position: relative !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
         opacity: 1 !important;
         display: block !important;
         width: 100% !important;
@@ -1297,9 +1248,22 @@
         display: none !important;
       }
 
+      .g-cap {
+        padding: 6px 10px 8px;
+        gap: 6px;
+        border-left: none;
+        display: flex;
+        flex-direction: column;
+      }
+
       .g-cap-id,
       .g-cap-title {
         font-size: 11px;
+        white-space: normal;
+        overflow: visible;
+        word-break: break-word;
+        line-height: 1.4;
+        display: block;
       }
 
       /* ABOUT */
